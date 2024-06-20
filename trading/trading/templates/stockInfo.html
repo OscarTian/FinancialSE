@@ -1,0 +1,289 @@
+{% extends 'layui_base.html' %}
+{% load static %}
+{% block title %}注册{% endblock %}
+{% block link %}{% endblock %}
+{% block body_class %}{% endblock %}
+{% block body %}
+    <div class="layui-fluid">
+        <div class="layui-row layui-col-space15">
+            <di class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-header">股票信息</div>
+                    <div class="layui-card-body">
+                        <div class="layui-carousel layadmin-carousel layadmin-backlog">
+                            <div carousel-item>
+                                <ul class="layui-row layui-col-space10">
+
+                                    <li class="layui-col-xs3">
+                                        <a class="layadmin-backlog-body">
+                                            <h3>股票名称</h3>
+                                            <p><cite id="stock_name">--</cite></p>
+                                        </a>
+                                    </li>
+
+                                    <li class="layui-col-xs3">
+                                        <a class="layadmin-backlog-body">
+                                            <h3>股票代码</h3>
+                                            <p><cite id="stock_code">--</cite></p>
+                                        </a>
+                                    </li>
+
+                                    <li class="layui-col-xs3">
+                                        <a class="layadmin-backlog-body">
+                                            <h3>最高</h3>
+                                            <p><cite id="stock_max">--</cite></p>
+                                        </a>
+                                    </li>
+
+                                    <li class="layui-col-xs3">
+                                        <a class="layadmin-backlog-body">
+                                            <h3>最低</h3>
+                                            <p><cite id="stock_min">--</cite></p>
+                                        </a>
+                                    </li>
+
+                                    <li class="layui-col-xs3">
+                                        <a class="layadmin-backlog-body">
+                                            <h3>今开</h3>
+                                            <p><cite id="stock_today_price">--</cite></p>
+                                        </a>
+                                    </li>
+
+                                    <li class="layui-col-xs3">
+                                        <a class="layadmin-backlog-body">
+                                            <h3>昨收</h3>
+                                            <p><cite id="stock_last_day">--</cite></p>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </di>
+
+        </div>
+
+        <div class="layui-row lauyi-col-soace15">
+            <div class="layui-col-md8">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        数据概览
+                        <span class="layui-font-green">{{ tips }}</span>
+                    </div>
+                    <div class="layui-card-body">
+
+                        <div id="echarts" style="width: 100%;height: 350px"></div>
+
+                        <div class="layui-row">
+                            <div class="layui-col-md12">
+                                <div class="layui-card">
+                                    <div class="layui-card-header">交易</div>
+                                    <div class="layui-card-body">
+                                        <div class="layui-row">
+                                            <div class="layui-col-md6">
+                                                <fieldset class="layui-elem-field">
+                                                    <legend>我当前持有</legend>
+                                                    <div class="layui-field-box">
+                                                        {% if my_have %}
+                                                            {{ my_have }}
+                                                        {% else %}
+                                                            0
+                                                        {% endif %}
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                            <div class="layui-col-md6">
+                                                <fieldset class="layui-elem-field">
+                                                    <legend>我的钱包余额</legend>
+                                                    <div class="layui-field-box">
+                                                        {{ wallet.balance }}
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                        <div class="layui-font-red">{{ error }}</div>
+                                        <form class="layui-form" method="post">
+                                            {% csrf_token %}
+                                            <div class="layui-form-item">
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">买入</label>
+                                                    <div class="layui-input-inline layui-input-wrap">
+                                                        <input type="tel" name="baynumber" autocomplete="off"
+                                                               lay-reqtext="买入数量" class="layui-input demo-phone">
+                                                    </div>
+                                                    <div class="layui-form-mid" style="padding: 0!important;">
+                                                        <button type="submit" class="layui-btn layui-btn-primary"
+                                                                lay-on="get-vercode">买入
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="layui-form-item">
+                                                <div class="layui-inline">
+                                                    <label class="layui-form-label">卖出</label>
+                                                    <div class="layui-input-inline layui-input-wrap">
+                                                        <input type="tel" name="sellnumber" autocomplete="off"
+                                                               lay-reqtext="卖出数量" class="layui-input demo-phone">
+                                                    </div>
+                                                    <div class="layui-form-mid" style="padding: 0!important;">
+                                                        <button type="submit" class="layui-btn layui-btn-primary"
+                                                                lay-on="get-vercode">卖出
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md4">
+                <div class="layui-card">
+                    <div class="layui-card-header">我的交易记录</div>
+                    <div class="layui-card-body">
+                        <table class="layui-table">
+                            <colgroup>
+                                <col>
+                                <col>
+                                <col>
+                                <col>
+                                <col>
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>类型</th>
+                                <th>数量</th>
+                                <th>单价</th>
+                                <th>总额</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for r in record %}
+                                <tr>
+                                    <td>{{ r.buy_time }}</td>
+                                    <td>
+                                        {% if r.status == 1 %}
+                                            <span class="layui-badge layui-bg-green">买入</span>
+                                        {% else %}
+                                            <span class="layui-badge layui-bg-orange">卖出</span>
+                                        {% endif %}
+
+                                    </td>
+                                    <td>{{ r.num }}</td>
+                                    <td>{{ r.price }}</td>
+                                    <td>{{ r.total_price }}</td>
+                                </tr>
+                            {% endfor %}
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
+{% block script %}
+    <script src="{% static 'echarts.js' %}"></script>
+    <script src="{% static 'jquery.min.js' %}"></script>
+    <script>
+            var loadIndex
+              
+        function initEcharts(l) {
+            var chartDom = document.getElementById('echarts');
+            var myChart = echarts.init(chartDom);
+            {#myChart.showLoading({text: '数据加载中...',effect: 'bubble', color: '#00BFA5',textStyle: {color: '#00BFA5'}});#}
+
+
+            var option = {
+                tooltip: {
+                    trigger: 'axis',
+                    position: function (pt) {
+                        return [pt[0], '10%'];
+                    }
+                },
+                "xAxis": {
+                    "type": "category",
+                    "data": ["2024-01-02 12:12:00", "2024-01-02 12:12:00", "2024-01-02 12:12:00"]
+                },
+                yAxis: {
+                    type: 'value',
+                    boundaryGap: [0, '100%']
+                },
+                dataZoom: [
+                    {
+                        type: 'inside',
+                        start: 0,
+                        end: 10
+                    },
+                    {
+                        start: 0,
+                        end: 10
+                    }
+                ],
+                series: [
+                    {"name": "实时价格", "type": "line", "data": [12, 13, 14]},
+                ],
+            };
+
+            setInterval(function () {
+                l.close(loadIndex)
+                $.ajax({
+                    url: "/get_stock_data/{{ stock_obj.id }}/",
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.status) {
+
+                            myChart.setOption({
+                                xAxis: data.data.echarts_data.xAxis,
+                                series: data.data.echarts_data.series
+                            });
+                            var dict = data.data.stock_info
+                            for (var key in dict) {
+                                if (dict.hasOwnProperty(key)) {
+                                    $('#stock_' + key).html(dict[key])
+                                }
+                            }
+                        }
+
+                    }, error: function (xhr, status, error) {
+                        console.log(error);
+                    }
+                })
+
+            }, 3000);
+
+
+            myChart.setOption(option);
+
+        }
+
+        layui.config({
+            base: '/static/res/' // 静态资源所在路径
+        }).use(['index', 'console'], function () {
+            var layer = layui.layer;
+            loadIndex = layer.msg('加载中', {
+                icon: 16,
+                shade: 0.01
+              });
+            initEcharts(layer)
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'layui_base.html' %}
+{% block title %}注册{% endblock %}
+{% block link %}
+    <style>
+        .bg {
+            background: #f0f2f5;
+            background-image: url(/static/admin/simpleui-x/img/bg.svg);
+            min-height: 100%;
+            background-repeat: no-repeat;
+            background-position: 50%;
+            background-size: 100%;
+            padding: 20px 0;
+            position: relative;
+        }
+    </style>
+{% endblock %}
+
+{% block body_class %}class="bg"{% endblock %}
+{% block body %}
+    <div class="layadmin-user-login layadmin-user-display-show" id="LAY-user-login" style="display: none;">
+        <div class="layadmin-user-login-main">
+            <div class="layadmin-user-login-box layadmin-user-login-header">
+                <h2>注册量化交易系统</h2>
+                <p></p>
+            </div>
+            <form class="layadmin-user-login-box layadmin-user-login-body layui-form" method="post">
+                {% csrf_token %}
+                <div class="layui-form-item">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-cellphone"
+                           for="LAY-user-login-cellphone"></label>
+                    <input type="text" name="username" id="LAY-user-login-cellphone" lay-verify="required"
+                           placeholder="用户名" class="layui-input">
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-password"
+                           for="LAY-user-login-password"></label>
+                    <input type="password" name="password" id="LAY-user-login-password" lay-verify="required"
+                           placeholder="密码" class="layui-input">
+                </div>
+                <div class="layui-form-item">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-password"
+                           for="LAY-user-login-repass"></label>
+                    <input type="password" name="password2" id="LAY-user-login-repass" lay-verify="required"
+                           placeholder="确认密码" class="layui-input">
+                </div>
+                <div class="layui-form-item">
+                    <label class="layadmin-user-login-icon layui-icon layui-icon-username"
+                           for="LAY-user-login-nickname"></label>
+                    <input type="text" name="nickname" id="LAY-user-login-nickname" lay-verify="required"
+                           placeholder="昵称" class="layui-input">
+                </div>
+                <div class="layui-form-item">
+                    <input type="checkbox" name="agreement" lay-skin="primary" title="同意用户协议" checked>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-font-red">{{ error }}</div>
+                    <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="LAY-user-reg-submit">注 册</button>
+                </div>
+                <div class="layui-trans layui-form-item layadmin-user-login-other">
+                    <a href="/"
+                       class="layadmin-user-jump-change layadmin-link layui-hide-xs">用已有帐号登入</a>
+                    <a href="/"
+                       class="layadmin-user-jump-change layadmin-link layui-hide-sm layui-show-xs-inline-block">登入</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="layui-trans layadmin-user-login-footer">
+
+            <p>© All Rights Reserved </p>
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block script %}{% endblock %}
